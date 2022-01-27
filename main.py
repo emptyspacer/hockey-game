@@ -1,5 +1,6 @@
 import random, json, os
 
+
 # this function is for updating the data variable seen below to keep it consistant with the teams.json file
 def updateData():
   return json.load(open("teams.json"))
@@ -10,9 +11,13 @@ def dumpData(data):
   with open("teams.json","w") as writer:
     json.dump(data,writer)
 
-data = updateData()
 
-#cheese
+# this function pauses the program using an input
+def pause():
+  input("\nPress enter to continue")
+
+
+data = updateData()
 
 
 # this function prints the main menu cover art
@@ -179,7 +184,9 @@ def createTeam(data = data):
     total += attack
     total += defence
 
-    input("Player saved.\n\nPress enter to continue ")
+    print("Player saved")
+    
+    pause()
 
   readJsonFile = open("teams.json")
 
@@ -283,6 +290,9 @@ def playGame(team1Name, team2Name):
 
   newData = updateData()
 
+  newData[team1Name]["goals scored"] += goalsScored[0]
+  newData[team2Name]["goals scored"] += goalsScored[1]
+
   newData[team1Name]["goals conceded"] += goalsScored[1]
   newData[team2Name]["goals conceded"] += goalsScored[0]
   
@@ -312,6 +322,7 @@ def playGame(team1Name, team2Name):
 
 # this function is used to display a menu that lets the user either create their own team or select a pre-existing team
 def teamSelection(playerName, filter = ""):
+  os.system("clear")
 
   print(f"{playerName} = TEAM SELECTION MENU") 
 
@@ -345,6 +356,8 @@ def teamSelection(playerName, filter = ""):
     if choice == 1:
       return team
 
+    os.system("clear")
+    
     printTeamData(team)
 
     input("\nPress enter to return to team viewer menu ")
