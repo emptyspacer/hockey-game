@@ -416,6 +416,8 @@ def mainMenu():
   print(f"\n{players[0]} is player 1 (playing first))")
   print(f"{players[1]} is player 2")
 
+  pause()
+
   teams = []
   teams.append(teamSelection(players[0]))
   teams.append(teamSelection(players[1],teams[0]))
