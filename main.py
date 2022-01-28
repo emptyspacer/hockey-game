@@ -12,8 +12,6 @@ def dumpData(data):
 
 data = updateData()
 
-#cheese
-
 
 # this function prints the main menu cover art
 def coverArt():
