@@ -1,4 +1,9 @@
-import random, json, os
+import random, json, os, time
+
+
+# hockey stick main menu art and intro screen art by llizard
+# -> https://www.asciiart.eu/sports-and-outdoors/ice-hockey
+
 
 # this function is for clearing the console of text
 def clearScreen():
@@ -23,6 +28,39 @@ def pause():
 data = updateData()
 
 
+# this function is for printing the intro screen animation
+def introScreen():
+
+  final = [
+    "              _                                  ",
+    "                \                                ",
+    "                 \          \                    ",
+    "  ==0        ==0_/\     ==0_/\                   ",
+    "   /\         /\_        /\   \_       _==0_/\   ",
+    "  |\ \        |\        |\ \          |\ \_   \  ",
+    " /  | \_     /  |      /  |          / /       \_",
+    "--  --      --  --    --  --        -- -         "
+  ]
+
+  # indexing each line in final to create 4 stages
+  stages = [
+    [line[:12] for line in final],
+    [line[:22] for line in final],
+    [line[:36] for line in final],
+    final
+  ]
+
+  # going through each stage, clearing the screen and then printing each line of the stage
+  for stage in stages:
+    clearScreen()
+
+    for line in stage:
+      print(line)
+
+    time.sleep(1.1)
+
+  pause()
+
 # this function prints the main menu cover art
 def coverArt():
   print(
@@ -36,7 +74,6 @@ HOCKEY GAME PROJECT
  /  | \_ = _/ |  \ 
 ~   ~         ~   ~"""[1:]
   )
-  # hockey stick ASCII art by llizard - https://www.asciiart.eu/sports-and-outdoors/ice-hockey
 
 
 # this function is for printing the data about a team in a readable way for the user
@@ -458,5 +495,7 @@ def mainMenu():
   playGame(*teams)
   
   
+introScreen()
+
 while True:
   mainMenu()
