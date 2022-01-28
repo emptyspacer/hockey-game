@@ -1,5 +1,9 @@
 import random, json, os
 
+# this function is for clearing the console of text
+def clearScreen():
+  os.system("clear")
+
 # this function is for updating the data variable seen below to keep it consistant with the teams.json file
 def updateData():
   return json.load(open("teams.json"))
@@ -11,7 +15,6 @@ def dumpData(data):
     json.dump(data,writer)
 
 data = updateData()
-
 
 # this function prints the main menu cover art
 def coverArt():
@@ -32,12 +35,14 @@ HOCKEY GAME PROJECT
 # this function is for printing the data about a team in a readable way for the user
 def printTeamData(teamName):
 
-  print(teamName,"\n")
+  clearScreen()
+
+  print("Name: ",teamName,"\n",sep="")
 
   teamData = data[teamName]
 
   for key in list(teamData.keys())[:-1]:
-    print(key + ":", teamData[key])
+    print(key.title() + ":", teamData[key])
 
   players = teamData["players"]
 
@@ -45,7 +50,7 @@ def printTeamData(teamName):
 
   for player in players:
     for key in player.keys():
-      print(" ", key + ":", player[key])
+      print(" ", key.title() + ":", player[key])
 
     print()
 
@@ -105,7 +110,7 @@ def createTeam(data = data):
   playerNames = []
 
   for i in range(6):
-    os.system("clear")
+    clearScreen()
 
     print("Remaining points:",35-total)
 
@@ -217,7 +222,7 @@ def playGame(team1Name, team2Name):
   goalsScored = [0,0]
 
   for team in teams:
-    os.system("clear")
+    clearScreen()
 
     print(f"Player {teams.index(team)+1} ({[team1Name,team2Name][teams.index(team)]})")
 
@@ -242,7 +247,7 @@ def playGame(team1Name, team2Name):
   penalties = 0
 
   while penalties < 5:
-    os.system("clear")
+    clearScreen()
 
     print(f"Penalty {penalties+1}, Player {penalties%2+1}'s go")
 
@@ -311,6 +316,8 @@ def playGame(team1Name, team2Name):
 # this function is used to display a menu that lets the user either create their own team or select a pre-existing team
 def teamSelection(playerName, filter = ""):
 
+  clearScreen()
+
   print(f"{playerName} = TEAM SELECTION MENU") 
 
   print("1. Select team\n2. Create team")
@@ -321,7 +328,7 @@ def teamSelection(playerName, filter = ""):
     return createTeam()
 
   while True:
-    os.system("clear")
+    clearScreen()
 
     teams = list(data.keys())
 
@@ -351,7 +358,7 @@ def teamSelection(playerName, filter = ""):
 # this is the main menu function, and allows the user to decide whether or not to play the game. It lets the users enter their names, select their teams and then play the game using all the previously created functions  
 def mainMenu():
 
-  os.system("clear")
+  clearScreen()
 
   coverArt()
 
@@ -361,7 +368,7 @@ def mainMenu():
   if choice == 2:
     quit()
 
-  os.system("clear")
+  clearScreen()
 
   playerName1 = validName(
     "Enter player name 1: ",
