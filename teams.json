@@ -1,10 +1,10 @@
 {
     "eeeeee": {
-        "wins": 3,
+        "wins": 4,
         "losses": 1,
         "draws": 0,
-        "goals scored": 3,
-        "goals conceded": 9,
+        "goals scored": 6,
+        "goals conceded": 11,
         "players": [
             {
                 "name": "jim",
@@ -40,10 +40,10 @@
     },
     "cheese men": {
         "wins": 1,
-        "losses": 3,
+        "losses": 4,
         "draws": 0,
-        "goals scored": 2,
-        "goals conceded": 11,
+        "goals scored": 4,
+        "goals conceded": 14,
         "players": [
             {
                 "name": "wogad",

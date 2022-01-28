@@ -100,7 +100,7 @@ def printTeamData(teamName):
 
 
 # this function is for validating a name (player name, team name, etc. ) and will return a valid string. It takes in a required variable (message) and then optional variables for the minimum character length, what strings should not be allowed, and the error message if the string the user enters is in the filter list    
-def validName(message, requiredLength = 7, filter=[], filterErrorMessage = ""):
+def validName(message, requiredLength = 4, filter=[], filterErrorMessage = ""):
 
   while True:
     name = input(message)
