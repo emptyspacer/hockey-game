@@ -4,6 +4,7 @@ import random, json, os
 def clearScreen():
   os.system("clear")
 
+
 # this function is for updating the data variable seen below to keep it consistant with the teams.json file
 def updateData():
   return json.load(open("teams.json"))
@@ -11,13 +12,12 @@ def updateData():
 
 # this function is used to save a data (dict) object to the teams.json file
 def dumpData(data):
-  with open("teams.json","w") as writer:
-    json.dump(data,writer)
+  json.dump(data,open("teams.json","w"))
 
 
 # this function pauses the program using an input
 def pause():
-  input("\nPress enter to continue")
+  input("\nPress enter to continue ")
 
 
 data = updateData()
@@ -63,7 +63,7 @@ def printTeamData(teamName):
 
 
 # this function is for validating a name (player name, team name, etc. ) and will return a valid string. It takes in a required variable (message) and then optional variables for the minimum character length, what strings should not be allowed, and the error message if the string the user enters is in the filter list    
-def validName(message, requiredLength = 20, filter=[], filterErrorMessage = ""):
+def validName(message, requiredLength = 7, filter=[], filterErrorMessage = ""):
 
   while True:
     name = input(message)
@@ -73,6 +73,12 @@ def validName(message, requiredLength = 20, filter=[], filterErrorMessage = ""):
 
     elif not all(c.isalpha() for c in name.split()):
       print(f"Please do not include any special characters or integers in your team name (except spaces)")
+
+    elif name[0] == " " or name[-1] == " ":
+      print("Please make sure the first and last characters of the name are not spaces")
+
+    elif name.count(" ") > 2:
+      print("Please do not include more than 2 spaces")
 
     elif name in filter:
       print(filterErrorMessage)
@@ -327,7 +333,6 @@ def playGame(team1Name, team2Name):
 
 # this function is used to display a menu that lets the user either create their own team or select a pre-existing team
 def teamSelection(playerName, filter = ""):
-  os.system("clear")
 
   clearScreen()
 
@@ -353,7 +358,13 @@ def teamSelection(playerName, filter = ""):
     for i in range(len(teams)):
       print(f"{i+1}.) {teams[i]}")
 
-    choice = validInt("> ",1,len(teams))-1
+    print(f"{len(teams)+1}.) Return to team selection menu")
+
+    choice = validInt("> ",1,len(teams)+1)-1
+
+    if choice == len(teams):
+      return teamSelection(playerName, filter)
+
     team = teams[choice]
 
     print("\n1. Select this team\n2. View this teams stats")
