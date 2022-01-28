@@ -422,4 +422,6 @@ def mainMenu():
     
   playGame(*teams)
   
-mainMenu()
+  
+while True:
+  mainMenu()
