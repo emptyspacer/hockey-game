@@ -227,8 +227,8 @@ def playGame(team1Name, team2Name):
   team1 = data[team1Name]
   team2 = data[team2Name]
 
-  team1players = team1["players"]
-  team2players = team2["players"]
+  team1Players = team1["players"]
+  team2Players = team2["players"]
 
   goalkeepers = []
   attackers = []
@@ -299,36 +299,38 @@ def playGame(team1Name, team2Name):
 
     penalties += 1
 
-  newData = updateData()
+  data = updateData()
 
-  newData[team1Name]["goals scored"] += goalsScored[0]
-  newData[team2Name]["goals scored"] += goalsScored[1]
+  teamNames = [team1Name,team2Name]
 
-  newData[team1Name]["goals conceded"] += goalsScored[1]
-  newData[team2Name]["goals conceded"] += goalsScored[0]
+  for team in teamNames:
+    data[team]["goals scored"] += goalsScored[teamNames.index(team)]
+
+  for team in teamNames:
+    data[team]["goals conceded"] += goalsScored[teamNames.index(team)-1]
   
   if goalsScored[0] == goalsScored[1]:
     print("The game was a draw")
 
-    newData[team1Name]["draws"] += 1
-    newData[team2Name]["draws"] += 1
+    for team in teamNames:
+      data[team]["draws"] += 1
 
   elif goalsScored[0] > goalsScored[1]:
-
     print(f"Player 1 ({team1Name}) won!")
-    newData[team1Name]["wins"] += 1
-    newData[team2Name]["losses"] += 1
+
+    data[team1Name]["wins"] += 1
+    data[team2Name]["losses"] += 1
 
   else:
     print(f"Player 2 ({team2Name})")
 
-    newData[team2Name]["wins"] += 1
-    newData[team1Name]["losses"] += 1
+    data[team2Name]["wins"] += 1
+    data[team1Name]["losses"] += 1
 
-  newData[team1Name]["players"] = team1players
-  newData[team2Name]["players"] = team2players
+  data[team1Name]["players"] = team1Players
+  data[team2Name]["players"] = team2Players
 
-  dumpData(newData)
+  dumpData(data)
 
 
 # this function is used to display a menu that lets the user either create their own team or select a pre-existing team
