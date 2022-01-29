@@ -470,13 +470,12 @@ def mainMenu():
   clearScreen()
 
   playerName1 = validName(
-    "Enter player name 1: ",
-    7
+    "Enter player name 1: "
   )
 
   playerName2 = validName(
     "Enter player name 2: ",
-    7,
+    4,
     [playerName1],
     "Please enter an unique player name"
   )
