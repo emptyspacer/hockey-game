@@ -1,4 +1,9 @@
-import random, json, os
+import random, json, os, time
+
+
+# hockey stick main menu art and intro screen art by llizard
+# -> https://www.asciiart.eu/sports-and-outdoors/ice-hockey
+
 
 # this function is for clearing the console of text
 def clearScreen():
@@ -23,6 +28,39 @@ def pause():
 data = updateData()
 
 
+# this function is for printing the intro screen animation
+def introScreen():
+
+  final = [
+    "              _                                  ",
+    "                \                                ",
+    "                 \          \                    ",
+    "  ==0        ==0_/\     ==0_/\                   ",
+    "   /\         /\_        /\   \_       _==0_/\   ",
+    "  |\ \        |\        |\ \          |\ \_   \  ",
+    " /  | \_     /  |      /  |          / /       \_",
+    "--  --      --  --    --  --        -- -         "
+  ]
+
+  # indexing each line in final to create 4 stages
+  stages = [
+    [line[:12] for line in final],
+    [line[:22] for line in final],
+    [line[:36] for line in final],
+    final
+  ]
+
+  # going through each stage, clearing the screen and then printing each line of the stage
+  for stage in stages:
+    clearScreen()
+
+    for line in stage:
+      print(line)
+
+    time.sleep(1.1)
+
+  pause()
+
 # this function prints the main menu cover art
 def coverArt():
   print(
@@ -36,7 +74,6 @@ HOCKEY GAME PROJECT
  /  | \_ = _/ |  \ 
 ~   ~         ~   ~"""[1:]
   )
-  # hockey stick ASCII art by llizard - https://www.asciiart.eu/sports-and-outdoors/ice-hockey
 
 
 # this function is for printing the data about a team in a readable way for the user
@@ -63,7 +100,7 @@ def printTeamData(teamName):
 
 
 # this function is for validating a name (player name, team name, etc. ) and will return a valid string. It takes in a required variable (message) and then optional variables for the minimum character length, what strings should not be allowed, and the error message if the string the user enters is in the filter list    
-def validName(message, requiredLength = 7, filter=[], filterErrorMessage = ""):
+def validName(message, requiredLength = 4, filter=[], filterErrorMessage = ""):
 
   while True:
     name = input(message)
@@ -122,6 +159,7 @@ def createTeam(data = data):
   total = 0
   playerNames = []
 
+  # repeating code 6 times (for the 6 team players)
   for i in range(6):
     clearScreen()
 
@@ -141,42 +179,64 @@ def createTeam(data = data):
     )
     
     requiredLeft = 35-total-(17*(5-len(players)))
-
-    if requiredLeft > 0:
-      print("\nThis players stats must add to (at least)", requiredLeft,"\n")
-
     remainingPoints = 35 - total
 
-    if remainingPoints > 0:
+    minimum = False
+    maximum = False
+
+    # checking if the current player requires a certain number of minimum points (so any later players stats are valid)
+    if requiredLeft > 0:
+      minimum = True
+
+    # checking if the required points for this player is 17 (the maximum), and if it is setting attack and defence to 10 and 7
+    if requiredLeft == 17:
+      print("This player's stats must add to exactly 17, so their attack and defence have been set to 10 and 7 respectively")
+      attack = 10
+      defence = 7
+    
+    elif remainingPoints > 0:
       if remainingPoints < 17:
-        print("\nThis players stats cannot add to more than",remainingPoints,"\n")
+        maximum = True
 
-      valid = False
+      # displaying appropriate warning message (if any is required)
 
-      while not valid:
-          if remainingPoints < 10:
-              attack = validInt("Enter players's attack: ",0,remainingPoints)
+      if minimum and maximum:
+        print(f"This players stats must add to exactly {requiredLeft}")
 
-          else:
-              attack = validInt("Enter player's attack: ",0,10)
+      elif minimum:
+        print(f"This players stats must add to (at least) {requiredLeft}")
 
-          if remainingPoints - attack > 0:
-            if remainingPoints < 17:
-              defence = validInt("Enter player's defence: ",0,remainingPoints-attack)
+      elif maximum: 
+        print(f"This players stats cannot add to more than {remainingPoints}")
 
-            else:
-              defence = validInt("Enter player's defence: ",0,7)
 
-          else:
-              print("You have used all your remaining points on this players attack, their defence has been set to 0")
-              defence = 0
+      if remainingPoints < 10:
+          attack = validInt("Enter players's attack: ",0,remainingPoints)
 
-          if defence + attack >= requiredLeft:
-            valid = True
+      elif requiredLeft > 7:
+          attack = validInt("Enter player's attack: ",requiredLeft-7,10)
 
-          else:
-            print("\nPlease re-enter the values, see above message to see number of required points\n")
+      else:
+          attack = validInt("Enter player's attack: ",0,10)
 
+
+      if remainingPoints - attack > 0:
+        # checking if after the attack is added to the total, there needs to be a limit on the number of defence points the player can have
+        if remainingPoints - attack < 7:
+          defence = validInt("Enter player's defence: ",0,remainingPoints-attack)
+
+        elif attack < requiredLeft:
+          defence = validInt("Enter player's defence: ",requiredLeft-attack,7)
+        
+        else:
+          defence = validInt("Enter player's defence: ",0,7)
+
+      # if the player has no more points to spend on this players attack, set attack to 0 and display message
+      else:
+          print("You have used all your remaining points on this players attack, their defence has been set to 0")
+          defence = 0
+
+    # if there are remaining points, setting player's attack and defence both to 0 
     else:
       print("Players attack and defence set to 0 as you have no points remaining")
 
@@ -199,12 +259,7 @@ def createTeam(data = data):
     
     pause()
 
-  readJsonFile = open("teams.json")
-
-  data = updateData()
-
-  readJsonFile.close()
-
+  # creating the team in the dict
   data[teamName] = {
     "wins":0,
     "losses":0,
@@ -214,6 +269,7 @@ def createTeam(data = data):
     "players":players
   }
 
+  # saving the team to the teams.json file by dumping the data variable
   dumpData(data)
 
   return teamName
@@ -221,7 +277,8 @@ def createTeam(data = data):
 
 # this function is passed in the two team names, and is used to actually play the game
 def playGame(team1Name, team2Name):
-
+  
+  # updating the data variable so that it includes any newly created teams
   data = updateData()
 
   team1 = data[team1Name]
@@ -236,6 +293,7 @@ def playGame(team1Name, team2Name):
   teams = [team1,team2]
   goalsScored = [0,0]
 
+  # getting each user to select a player to play in goal
   for team in teams:
     clearScreen()
 
@@ -259,9 +317,8 @@ def playGame(team1Name, team2Name):
 
     input("\nPress enter to continue ")
 
-  penalties = 0
 
-  while penalties < 5:
+  for penalties in range(5):
     clearScreen()
 
     print(f"Penalty {penalties+1}, Player {penalties%2+1}'s go")
@@ -272,6 +329,7 @@ def playGame(team1Name, team2Name):
 
     teamAttackers = attackers[penalties%2]
 
+    # printing a list of available attackers for the user to choose from
     for i in range(len(teamAttackers)):
       player = teamAttackers[i]
 
@@ -283,9 +341,13 @@ def playGame(team1Name, team2Name):
 
     attackers[penalties%2].pop(selection-1)
 
+    # getting difference between attacker and other team's goalkeeper
     difference = attacker["attack"]-defendingGoalkeeper["defence"]
 
+    # adding a random integer between 1 and 4 to the difference
     difference += random.randint(1,4)
+
+    # checking if the penalty has been scored or not and updating the goalsScored list accordingly
 
     if difference < 0:
       print(f"{defendingGoalkeeper['name']} saved the penalty!")
@@ -297,11 +359,11 @@ def playGame(team1Name, team2Name):
 
     input("\nPress enter to continue ")
 
-    penalties += 1
-
   data = updateData()
 
   teamNames = [team1Name,team2Name]
+
+  # editing data variable to add match data
 
   for team in teamNames:
     data[team]["goals scored"] += goalsScored[teamNames.index(team)]
@@ -315,6 +377,8 @@ def playGame(team1Name, team2Name):
     for team in teamNames:
       data[team]["draws"] += 1
 
+  # checking which team has won and updating data accordingly
+
   elif goalsScored[0] > goalsScored[1]:
     print(f"Player 1 ({team1Name}) won!")
 
@@ -327,9 +391,11 @@ def playGame(team1Name, team2Name):
     data[team2Name]["wins"] += 1
     data[team1Name]["losses"] += 1
 
+  # resetting the players lists of each team so that the changes made during the match to make sure the same attacker is not selected twice are not saved
   data[team1Name]["players"] = team1Players
   data[team2Name]["players"] = team2Players
 
+  # saving the new data object to the teams.json file
   dumpData(data)
 
 
@@ -339,6 +405,8 @@ def teamSelection(playerName, filter = ""):
   clearScreen()
 
   print(f"{playerName} = TEAM SELECTION MENU") 
+
+  # checking if user wants to view team or create team
 
   print("1. Select team\n2. Create team")
 
@@ -352,14 +420,17 @@ def teamSelection(playerName, filter = ""):
 
     teams = list(data.keys())
 
+    # making sure the team selected by the previous user (if there has been one) is not selected by current user
     try:
       teams.remove(filter)
     except:
       pass
 
+    # printing out list of teams
     for i in range(len(teams)):
       print(f"{i+1}.) {teams[i]}")
 
+    # giving user option to return to main team selection menu in case they have changed their mind once seeing the teams and want to create their own
     print(f"{len(teams)+1}.) Return to team selection menu")
 
     choice = validInt("> ",1,len(teams)+1)-1
@@ -421,9 +492,12 @@ def mainMenu():
   teams = []
   teams.append(teamSelection(players[0]))
   teams.append(teamSelection(players[1],teams[0]))
-    
+
+
   playGame(*teams)
   
   
+introScreen()
+
 while True:
   mainMenu()
