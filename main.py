@@ -10,6 +10,11 @@ def clearScreen():
   os.system("clear")
 
 
+# this function pauses the program using an input
+def pause():
+  input("\nPress enter to continue ")
+
+
 # this function is for updating the data variable seen below to keep it consistant with the teams.json file
 def updateData():
   return json.load(open("teams.json"))
@@ -18,11 +23,6 @@ def updateData():
 # this function is used to save a data (dict) object to the teams.json file
 def dumpData(data):
   json.dump(data,open("teams.json","w"))
-
-
-# this function pauses the program using an input
-def pause():
-  input("\nPress enter to continue ")
 
 
 data = updateData()
