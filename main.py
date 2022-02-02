@@ -103,36 +103,38 @@ def printTeamData(teamName):
 def validName(message, requiredLength = 4, filter=[], filterErrorMessage = ""):
 
   while True:
-    name = input(message)
+    candidate = input(message)
 
-    if len(name) < requiredLength:
+    if len(candidate) < requiredLength:
       print(f"Please enter a team name with {requiredLength} or more characters")
 
-    elif not all(c.isalpha() for c in name.split()):
+    elif not all(c.isalpha() for c in candidate.split()):
       print(f"Please do not include any special characters or integers in your team name (except spaces)")
 
-    elif name[0] == " " or name[-1] == " ":
+    elif candidate[0] == " " or candidate[-1] == " ":
       print("Please make sure the first and last characters of the name are not spaces")
 
-    elif name.count(" ") > 2:
+    elif candidate.count(" ") > 2:
       print("Please do not include more than 2 spaces")
 
-    elif name in filter:
+    elif candidate in filter:
       print(filterErrorMessage)
 
     else:
-      return name
+      return candidate
 
       
 # this function takes in a message, mininum and maximum and returns a valid integer that is >= min and <= max
 def validInt(message, min, max):
 
   while True:
-    userInput = input(message)
+    candidate = input(message)
 
-    if userInput.isnumeric():
-      if int(userInput) <= max and int(userInput) >= min:
-        return int(userInput)
+    if candidate.isnumeric():
+      candidate = int(candidate)
+
+      if candidate <= max and candidate >= min:
+        return candidate
 
       else:
         print(f"Please enter an integer between {min} and {max}")
@@ -151,19 +153,19 @@ def createTeam(data = data):
     "Please enter a name that has not been taken"
   )
 
-  print("\nThe total of all your players attack and defence scores must equal 35. Attack score can be an integer between 0 and 10, and defence score can be an integer between 0 and 7")
+  print("\nThe pointsSpent of all your players attack and defence scores must equal 35. Attack score can be an integer between 0 and 10, and defence score can be an integer between 0 and 7")
 
   input("\nPress enter to continue ")
 
   players = []
-  total = 0
+  pointsSpent = 0
   playerNames = []
 
   # repeating code 6 times (for the 6 team players)
   for i in range(6):
     clearScreen()
 
-    print("Remaining points:",35-total)
+    print("Remaining points:",35-pointsSpent)
 
     requiredLeft = 0
 
@@ -178,8 +180,8 @@ def createTeam(data = data):
       "Please enter a unique player name for this team"
     )
     
-    requiredLeft = 35-total-(17*(5-len(players)))
-    remainingPoints = 35 - total
+    requiredLeft = 35-pointsSpent-(17*(5-len(players)))
+    remainingPoints = 35 - pointsSpent
 
     minimum = False
     maximum = False
@@ -221,7 +223,7 @@ def createTeam(data = data):
 
 
       if remainingPoints - attack > 0:
-        # checking if after the attack is added to the total, there needs to be a limit on the number of defence points the player can have
+        # checking if after the attack is added to the pointsSpent, there needs to be a limit on the number of defence points the player can have
         if remainingPoints - attack < 7:
           defence = validInt("Enter player's defence: ",0,remainingPoints-attack)
 
@@ -252,8 +254,8 @@ def createTeam(data = data):
 
     players.append(player)
 
-    total += attack
-    total += defence
+    pointsSpent += attack
+    pointsSpent += defence
 
     print("Player saved")
     
