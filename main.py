@@ -45,19 +45,21 @@ def introScreen():
   # indexing each line in final to create 4 stages
   stages = [
     [line[:12] for line in final],
-    [line[:22] for line in final],
-    [line[:36] for line in final],
-    final
+    [line[12:22] for line in final],
+    [line[22:36] for line in final],
+    [line[36:] for line in final]
   ]
 
   # going through each stage, clearing the screen and then printing each line of the stage
-  for stage in stages:
+  for i in range(4):
+    stage = stages[i]
+
     clearScreen()
 
     for line in stage:
-      print(line)
+      print("   "*i, line)
 
-    time.sleep(1.1)
+    time.sleep(0.4)
 
   pause()
 
