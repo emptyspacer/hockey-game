@@ -148,6 +148,8 @@ def validInt(message, min, max):
 # this function is for creating a team, and saving the team to the teams.json file. It returns the team name, which is used later on
 def createTeam(data = data):
 
+  clearScreen()
+
   teamName = validName(
     "Enter team name: ",
     6,
@@ -155,7 +157,7 @@ def createTeam(data = data):
     "Please enter a name that has not been taken"
   )
 
-  print("\nThe pointsSpent of all your players attack and defence scores must equal 35. Attack score can be an integer between 0 and 10, and defence score can be an integer between 0 and 7")
+  print("\nThe total of all your players attack and defence scores must equal 35. Attack score can be an integer between 0 and 10, and defence score can be an integer between 0 and 7")
 
   input("\nPress enter to continue ")
 
