@@ -456,7 +456,19 @@ def teamSelection(playerName, filter = ""):
     printTeamData(team)
 
     input("\nPress enter to return to team viewer menu ")
-    
+
+
+def leaderboards():
+  byGamesWon = sorted(data,key=lambda x: x["games won"],reverse=True)[:3]
+  byFewestConceded = sorted(data,key=lambda x: x["goals conceded"])[:5]
+  
+  print("Top 3 teams by games won\n")
+  for team in byGamesWon:
+    print(team,team["games won"])
+
+  print("Top 5 teams by fewest goals conceded\n")
+  for team in byFewestConceded:
+    print(team,team["goals conceded"])  
     
 # this is the main menu function, and allows the user to decide whether or not to play the game. It lets the users enter their names, select their teams and then play the game using all the previously created functions  
 def mainMenu():
@@ -498,6 +510,14 @@ def mainMenu():
 
 
   playGame(*teams)
+
+  data = updateData()
+
+  leaderboards()
+
+  pause()
+
+
   
   
 introScreen()
