@@ -5,7 +5,7 @@ import random, json, os, time
 # -> https://www.asciiart.eu/sports-and-outdoors/ice-hockey
 
 
-# this function is for clearing the console of text
+# this function is for clearing the console
 def clearScreen():
   os.system("clear")
 
